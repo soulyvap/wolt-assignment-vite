@@ -1,4 +1,4 @@
-# Running a Zipped Vite React Project
+# Running the project
 
 This guide will walk you through the process of extracting and running a the project I made for the following assignment: https://github.com/woltapp/engineering-internship-2024?tab=readme-ov-file.
 
