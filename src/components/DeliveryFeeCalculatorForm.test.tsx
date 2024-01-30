@@ -6,10 +6,10 @@ describe("DeliveryFeeCalculatorForm component", () => {
   it("should render", () => {
     render(<DeliveryFeeCalculatorForm />);
 
-    const form = screen.getByTestId("form-heading");
+    const form = screen.getByRole("form");
     expect(form).toBeDefined();
 
-    const heading = screen.getByRole("heading");
+    const heading = screen.getByTestId("form-heading");
     expect(heading).toBeDefined();
 
     const cartValueInput = screen.getByLabelText("Cart value");

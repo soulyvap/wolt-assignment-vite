@@ -40,3 +40,13 @@ Before you begin, ensure that you have the following software installed on your 
    ```
 
    After running this command, you should see a message in the terminal indicating the URL where the application is running (usually http://localhost:5000 or similar). Copy this URL and paste it into your web browser to view the running application.
+
+# Running tests
+
+After the installation is complete, run the vitest tests using the following command:
+
+```bash
+ yarn test
+```
+
+The results of the tests will be shown in your terminal.
