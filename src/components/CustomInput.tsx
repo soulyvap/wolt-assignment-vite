@@ -52,7 +52,7 @@ const CustomInput = (props: CustomInputProps) => {
           min={props.min}
         />
         {isInvalid && (
-          <div {...errorMessageProps} className="text-red-600 text-sm">
+          <div {...errorMessageProps} className="text-red-600 text-sm w-full">
             {validationErrors.join(" ")}
           </div>
         )}

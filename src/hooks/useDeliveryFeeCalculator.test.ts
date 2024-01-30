@@ -22,14 +22,17 @@ import { DeliveryFeeCalculatorValues } from "../types/DeliveryFeeCalculatorValue
  * During the Friday rush, 3 - 7 PM, the delivery fee (the total fee including possible surcharges) will be multiplied by 1.2x. However, the fee still cannot be more than the max (15€). Considering timezone, for simplicity, use UTC as a timezone in backend solutions (so Friday rush is 3 - 7 PM UTC). In frontend solutions, use the timezone of the browser (so Friday rush is 3 - 7 PM in the timezone of the browser).
  */
 describe("useDeliveryFeeCalculator hook", () => {
+
   it("getLowCartValueSurcharge should return 0 for a cart value over 10", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getLowCartValueSurcharge(10.5)).toBe(0);
   });
+
   it("getLowCartValueSurcharge should return 0 for a cart value of 10", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getLowCartValueSurcharge(10)).toBe(0);
   });
+
   it("getLowCartValueSurcharge should return 1 for a cart value of 9", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getLowCartValueSurcharge(9)).toBe(1);
@@ -39,18 +42,22 @@ describe("useDeliveryFeeCalculator hook", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getDistanceFee(200)).toBe(2);
   });
+
   it("getDistanceFee should return 2 for a distance of 1000 m", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getDistanceFee(1000)).toBe(2);
   });
+
   it("getDistanceFee should return 3 for a distance of 1499 m", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getDistanceFee(1499)).toBe(3);
   });
+
   it("getDistanceFee should return 3 for a distance of 1500 m", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getDistanceFee(1500)).toBe(3);
   });
+
   it("getDistanceFee should return 4 for a distance of 1501 m", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getDistanceFee(1501)).toBe(4);
@@ -60,14 +67,17 @@ describe("useDeliveryFeeCalculator hook", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getItemAmountFee(4)).toBe(0);
   });
+
   it("getItemAmountFee should return 0.5 for an item count of 5", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getItemAmountFee(5)).toBe(0.5);
   });
+
   it("getItemAmountFee should return 3 for an item count of 10", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getItemAmountFee(10)).toBe(3);
   });
+
   it("getItemAmountFee should return 5.7 for an item count of 13", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.getItemAmountFee(13)).toBe(5.7);
@@ -79,18 +89,21 @@ describe("useDeliveryFeeCalculator hook", () => {
       true
     );
   });
+
   it("isFridayRush should return false for the date: 01/26/2024 14:59 (Friday before 15)", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.isFridayRush(new Date("01/26/2024 14:59"))).toBe(
       false
     );
   });
+
   it("isFridayRush should return false for the date: 01/26/2024 19:01 (Friday after 19)", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.isFridayRush(new Date("01/26/2024 19:01"))).toBe(
       false
     );
   });
+
   it("isFridayRush should return false for the date: 01/25/2024 17:00 (Thursday between 15-19)", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     expect(result.current.isFridayRush(new Date("01/25/2024 17:00"))).toBe(
@@ -104,75 +117,103 @@ describe("useDeliveryFeeCalculator hook", () => {
     expect(result.current.getDateTimeString(testDate)).toBe("2024-01-25T17:00");
   });
 
-  it("calculateDeliveryFee should throw an error if cartValue, distance or itemCount are undefined", () => {
+  it("getValidCalculatorValues should throw an error if cartValue, distance or itemCount are NaN", () => {
+    const { result } = renderHook(() => useDeliveryFeeCalculator());
+    const calculatorValues: DeliveryFeeCalculatorValues = {
+      cartValue: "hello",
+      distance: "4",
+      itemCount: "2",
+      orderTime: result.current.getDateTimeString(new Date()) ,
+      fee: undefined
+    }
+    expect(() => result.current.calculateDeliveryFee(calculatorValues)).toThrowError("Cart value, distance and item count must be valid numbers")
+  });
+
+  it("getValidCalculatorValues should throw an error if orderTime is not in the format YYYY-MM-DDTHH:MM", () => {
+    const { result } = renderHook(() => useDeliveryFeeCalculator());
+    const calculatorValues: DeliveryFeeCalculatorValues = {
+      cartValue: "10",
+      distance: "4",
+      itemCount: "2",
+      orderTime: "2024-01-25 17:00",
+      fee: undefined
+    }
+    expect(() => result.current.calculateDeliveryFee(calculatorValues)).toThrowError("Order time must be a valid date and time string")
+  });
+
+  it("getValidCalculatorValues should throw an error if cartValue, distance or itemCount are undefined", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     const calculatorValues: DeliveryFeeCalculatorValues = {
       cartValue: undefined,
       distance: undefined,
       itemCount: undefined,
-      orderTime: new Date(),
+      orderTime: result.current.getDateTimeString(new Date()) ,
       fee: undefined
     }
-    expect(() => result.current.calculateDeliveryFee(calculatorValues)).toThrowError("Missing required values for calculating delivery fee")
+    expect(() => result.current.getValidCalculatorValues(calculatorValues)).toThrowError("Missing required values for calculating delivery fee")
   });
 
   it("calculateDeliveryFee should return 0 if cartValue is equal to 200", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     const calculatorValues: DeliveryFeeCalculatorValues = {
-      cartValue: 200,
-      distance: 1000,
-      itemCount: 30,
-      orderTime: new Date(),
+      cartValue: "200",
+      distance: "1000",
+      itemCount: "30",
+      orderTime: result.current.getDateTimeString(new Date()),
       fee: undefined
     }
     expect(result.current.calculateDeliveryFee(calculatorValues)).toBe(
       0
     );
   });
+
   it("calculateDeliveryFee should return 0 if cartValue is greater than 200", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     const calculatorValues: DeliveryFeeCalculatorValues = {
-      cartValue: 300,
-      distance: 1000,
-      itemCount: 30,
-      orderTime: new Date(),
+      cartValue: "300",
+      distance: "1000",
+      itemCount: "30",
+      orderTime: result.current.getDateTimeString(new Date()),
       fee: undefined
     }
     expect(result.current.calculateDeliveryFee(calculatorValues)).toBe(
       0
     );
   });
+
   it("calculateDeliveryFee should return 15 at most", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     const calculatorValues: DeliveryFeeCalculatorValues = {
-      cartValue: 1,
-      distance: 5000,
-      itemCount: 1000,
-      orderTime: new Date(),
+      cartValue: "1",
+      distance: "5000",
+      itemCount: "1000",
+      orderTime: result.current.getDateTimeString(new Date()),
       fee: undefined
     }
     expect(result.current.calculateDeliveryFee(calculatorValues)).toBe(
       15
     );
   });
+
   it("calculateDeliveryFee should return 10 for a cart value of 2, a distance of 500 m, and a number of items of 1, when not in a Friday rush", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     const calculatorValues: DeliveryFeeCalculatorValues = {
-      cartValue: 2,
-      distance: 500,
-      itemCount: 1,
-      orderTime: new Date("01/25/2024 17:00"),
+      cartValue: "2",
+      distance: "500",
+      itemCount: "1",
+      orderTime: result.current.getDateTimeString(new Date("01/25/2024 17:00")),
       fee: undefined
     }
     expect(result.current.calculateDeliveryFee(calculatorValues)).toBe(10)
   });
+  
   it("calculateDeliveryFee should return 12 (x1.2 multiplier) for a cart value of 2, a distance of 500 m, and a number of items of 1, when in a Friday rush", () => {
     const { result } = renderHook(() => useDeliveryFeeCalculator());
     const calculatorValues: DeliveryFeeCalculatorValues = {
-      cartValue: 2,
-      distance: 500,
-      itemCount: 1,
-      orderTime: new Date("01/26/2024 17:00"),
+      cartValue: "2",
+      distance: "500",
+      itemCount: "1",
+      orderTime: result.current.getDateTimeString(new Date("01/26/2024 17:00")),
       fee: undefined
     }
     expect(result.current.calculateDeliveryFee(calculatorValues)).toBe(12)

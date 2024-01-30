@@ -80,6 +80,16 @@ describe("DeliveryFeeCalculatorForm component", () => {
     expect(deliveryFeeLabel).toBeNull();
   });
 
+  it("order time input should be invalid upon submission if its value is not a string in the format YYYY-MM-DDTHH:MM", () => {
+    render(<DeliveryFeeCalculatorForm />);
+    const orderTimeInput = screen.getByTestId("orderTime") as HTMLInputElement;
+    const submitButton = screen.getByTestId("submit-button");
+
+    fireEvent.change(orderTimeInput, { target: { value: "hello" } });
+    fireEvent.click(submitButton);
+    expect(orderTimeInput.ariaInvalid).toBeTruthy();
+  });
+
   it("should display the correct delivery fee only after submitting valid inputs", () => {
     render(<DeliveryFeeCalculatorForm />);
 
@@ -124,7 +134,7 @@ describe("DeliveryFeeCalculatorForm component", () => {
     fireEvent.click(submitButton);
 
     const fee = screen.getByTestId("fee");
-    expect(fee.textContent).toBe("0.00");
+    expect(fee.textContent).toBe("0,00");
   });
 
   it("should display a fee of 15.00 at most", () => {
@@ -146,10 +156,10 @@ describe("DeliveryFeeCalculatorForm component", () => {
     fireEvent.click(submitButton);
 
     const fee = screen.getByTestId("fee");
-    expect(fee.textContent).toBe("15.00");
+    expect(fee.textContent).toBe("15,00");
   });
 
-  it("should display a fee of 10.00c for a cart value of 2, a distance of 500 m, and a number of items of 1, when not in a Friday rush", () => {
+  it("should display a fee of 10.00 for a cart value of 2, a distance of 500 m, and a number of items of 1, when not in a Friday rush", () => {
     render(<DeliveryFeeCalculatorForm />);
 
     const cartValueInput = screen.getByTestId("cartValue") as HTMLInputElement;
@@ -170,7 +180,7 @@ describe("DeliveryFeeCalculatorForm component", () => {
     fireEvent.click(submitButton);
 
     const fee = screen.getByTestId("fee");
-    expect(fee.textContent).toBe("10.00");
+    expect(fee.textContent).toBe("10,00");
   });
 
   it("should display a fee of 12.00 for a cart value of 2, a distance of 500 m, and a number of items of 1, when in a Friday rush", () => {
@@ -194,7 +204,7 @@ describe("DeliveryFeeCalculatorForm component", () => {
     fireEvent.click(submitButton);
 
     const fee = screen.getByTestId("fee");
-    expect(fee.textContent).toBe("12.00");
+    expect(fee.textContent).toBe("12,00");
   });
 
   it("should reset form values", () => {

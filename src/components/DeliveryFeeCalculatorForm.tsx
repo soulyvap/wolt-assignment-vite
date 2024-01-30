@@ -18,7 +18,7 @@ const DeliveryFeeCalculatorForm = () => {
       cartValue: undefined,
       distance: undefined,
       itemCount: undefined,
-      orderTime: new Date(),
+      orderTime: getDateTimeString(new Date()),
       fee: undefined,
     });
 
@@ -52,7 +52,7 @@ const DeliveryFeeCalculatorForm = () => {
   return (
     <form className="styled-form" name="calculator-form" onSubmit={onSubmit}>
       <h1
-        className="mb-6 grow flex flex-row items-center sm:grow-0"
+        className="mb-6 grow flex flex-row items-center text-4xl sm:text-3xl sm:grow-0"
         data-testid="form-heading"
       >
         Wolt Delivery Fee Calculator
@@ -63,9 +63,12 @@ const DeliveryFeeCalculatorForm = () => {
         type="number"
         step={0.01}
         min={0.01}
-        value={cartValue?.toString() || ""}
+        value={cartValue || ""}
         dataTestId={"cartValue"}
-        onChange={(value) => handleValueChange("cartValue", Number(value))}
+        onChange={(value) => {
+          console.log(value);
+          handleValueChange("cartValue", value);
+        }}
         trailingText={"€"}
         isRequired={true}
         validationBehavior="native"
@@ -76,9 +79,9 @@ const DeliveryFeeCalculatorForm = () => {
         name={"deliveryDistance"}
         type="number"
         min={0}
-        value={distance?.toString() || ""}
+        value={distance || ""}
         dataTestId={"deliveryDistance"}
-        onChange={(value) => handleValueChange("distance", Number(value))}
+        onChange={(value) => handleValueChange("distance", value)}
         trailingText={"m"}
         isRequired={true}
         validationBehavior="native"
@@ -88,9 +91,9 @@ const DeliveryFeeCalculatorForm = () => {
         label={"Number of items"}
         type="number"
         min={1}
-        value={itemCount?.toString() || ""}
+        value={itemCount || ""}
         dataTestId={"numberOfItems"}
-        onChange={(value) => handleValueChange("itemCount", Number(value))}
+        onChange={(value) => handleValueChange("itemCount", value)}
         isRequired={true}
         validationBehavior="native"
         placeholder="e.g. 4"
@@ -98,11 +101,12 @@ const DeliveryFeeCalculatorForm = () => {
       <CustomInput
         label={"Order time"}
         type="datetime-local"
-        value={getDateTimeString(orderTime)}
+        value={orderTime}
         dataTestId={"orderTime"}
-        onChange={(value) => handleValueChange("orderTime", new Date(value))}
+        onChange={(value) => handleValueChange("orderTime", value)}
         isRequired={true}
         validationBehavior="native"
+        pattern="/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/"
       />
 
       <div className="w-full flex flex-row gap-6 my-6">
@@ -117,7 +121,6 @@ const DeliveryFeeCalculatorForm = () => {
           className="styled-button bg-yellow-400"
           onPress={onReset}
           dataTestId="reset-button"
-          isDisabled={!userIsFillingForm()}
         >
           Reset form
         </CustomButton>
@@ -130,12 +133,20 @@ const DeliveryFeeCalculatorForm = () => {
         >
           Delivery fee
           {fee != undefined ? (
-            <h1 aria-labelledby="fee-label" className="text-wolt-blue" id="fee">
+            <p
+              aria-labelledby="fee-label"
+              className="text-wolt-blue text-3xl font-bold"
+              id="fee"
+            >
               <span data-testid="fee" data-test-id="fee">
-                {fee.toFixed(2)}
+                {fee.toLocaleString("fi-FI", {
+                  style: "decimal",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </span>
               €
-            </h1>
+            </p>
           ) : (
             <ThreeDotsAnimation animate={userIsFillingForm()} />
           )}

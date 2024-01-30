@@ -31,6 +31,6 @@
     @apply px-4 py-2 rounded-md bg-gray-100 text-sm;
   }
   .styled-form {
-    @apply flex flex-col items-center justify-end sm:justify-center gap-8 sm:gap-4 bg-white rounded-md p-6 shadow-intense h-screen w-screen sm:h-auto sm:w-auto;
+    @apply flex flex-col items-center justify-end sm:justify-center gap-8 sm:gap-6 bg-white rounded-md p-6 shadow-intense h-screen w-screen sm:h-auto sm:w-[500px];
   }
 }

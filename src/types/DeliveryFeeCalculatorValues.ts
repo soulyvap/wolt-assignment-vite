@@ -2,9 +2,9 @@
  * Interface for the values used by the DeliveryFeeCalculator
  */
 export interface DeliveryFeeCalculatorValues {
-  cartValue: number | undefined
-  distance: number | undefined
-  itemCount: number | undefined
-  orderTime: Date
+  cartValue: string | undefined
+  distance: string | undefined
+  itemCount: string | undefined
+  orderTime: string
   fee: number | undefined
 }
