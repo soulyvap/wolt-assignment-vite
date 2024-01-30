@@ -65,10 +65,7 @@ const DeliveryFeeCalculatorForm = () => {
         min={0.01}
         value={cartValue || ""}
         dataTestId={"cartValue"}
-        onChange={(value) => {
-          console.log(value);
-          handleValueChange("cartValue", value);
-        }}
+        onChange={(value) => handleValueChange("cartValue", value)}
         trailingText={"€"}
         isRequired={true}
         validationBehavior="native"
