@@ -15,7 +15,7 @@ After extracting the files:
 
 1. **Open Terminal/Command Prompt**
 
-   Using the terminal of your choice, navigate to the folder you have extracted from the files using the "cd" command.
+   Using the terminal of your choice, navigate to the folder you have extracted from the files.
 
 3. **Install Dependencies**
 
