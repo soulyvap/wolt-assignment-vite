@@ -11,19 +11,13 @@ Before you begin, ensure that you have the following software installed on your 
 
 ## Steps
 
-1. **Download the Zipped File**
+After extracting the files:
 
-   Download the zipped file of the project onto your local machine.
+1. **Open Terminal/Command Prompt**
 
-2. **Extract the Zipped File**
+   Using the terminal of your choice, navigate to the folder you have extracted from the files using the "cd" command.
 
-   Once the download is complete, locate the zipped file in your system's file explorer. Right-click on the file and select "Extract All..." or "Unzip". Choose a suitable location for the extracted files.
-
-3. **Open Terminal/Command Prompt**
-
-   Navigate to the location where you extracted the files. Open a terminal/command prompt window here. On Windows, you can do this by holding Shift and right-clicking within the folder, then selecting "Open PowerShell window here" or "Open command window here".
-
-4. **Install Dependencies**
+3. **Install Dependencies**
 
    Run the following command to install the project's dependencies:
 
@@ -31,7 +25,7 @@ Before you begin, ensure that you have the following software installed on your 
    yarn
    ```
 
-5. **Start the Development Server**
+4. **Start the Development Server**
 
    After the installation is complete, start the development server with the following command:
 
