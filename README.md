@@ -1,4 +1,7 @@
-# Running the project
+# Testing the app online
+https://wolt-assignment-vite.vercel.app/
+
+# Running the project locally
 
 This guide will walk you through the process of extracting and running a the project I made for the following assignment: https://github.com/woltapp/engineering-internship-2024?tab=readme-ov-file.
 
